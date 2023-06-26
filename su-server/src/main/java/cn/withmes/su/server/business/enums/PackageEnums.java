@@ -1,0 +1,27 @@
+package cn.withmes.su.server.business.enums;
+
+import lombok.Getter;
+import lombok.NonNull;
+
+
+@Getter
+public enum PackageEnums {
+    LOGIN(1, "登录");
+    private int type;
+    private String desc;
+
+    PackageEnums(int type, String desc) {
+        this.type = type;
+        this.desc = desc;
+    }
+
+    public static PackageEnums getPackageEnumsByType(@NonNull int type ) {
+        for (PackageEnums enums : PackageEnums.values()) {
+            if (enums.type == type) {
+                return enums;
+            }
+        }
+        return null;
+
+    }
+}

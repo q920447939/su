@@ -1,0 +1,10 @@
+[INFO ] [] [] 2023-06-25 16:33:01.084 [main]  cn.withmes.su.server.SuServerApplication[51] - Starting SuServerApplication using Java 17 with PID 15584 (F:\liming\work_space\my_work_space\su\su-server\target\classes started by Administrator in F:\liming\work_space\my_work_space\su)
+ [INFO ] [] [] 2023-06-25 16:33:01.086 [main]  cn.withmes.su.server.SuServerApplication[634] - No active profile set, falling back to 1 default profile: "default"
+ [INFO ] [] [] 2023-06-25 16:33:01.374 [main]  cn.withmes.su.server.SuServerApplication[57] - Started SuServerApplication in 0.673 seconds (process running for 1.328)
+ [INFO ] [] [] 2023-06-25 16:34:29.160 [main]  cn.withmes.su.server.SuServerApplication[51] - Starting SuServerApplication using Java 17 with PID 12732 (F:\liming\work_space\my_work_space\su\su-server\target\classes started by Administrator in F:\liming\work_space\my_work_space\su)
+ [INFO ] [] [] 2023-06-25 16:34:29.162 [main]  cn.withmes.su.server.SuServerApplication[634] - No active profile set, falling back to 1 default profile: "default"
+ [INFO ] [] [] 2023-06-25 16:34:29.468 [main]  cn.withmes.su.server.SuServerApplication[57] - Started SuServerApplication in 0.649 seconds (process running for 1.193)
+ [INFO ] [] [] 2023-06-25 16:34:47.139 [main]  cn.withmes.su.server.SuServerApplication[51] - Starting SuServerApplication using Java 17 with PID 13704 (F:\liming\work_space\my_work_space\su\su-server\target\classes started by Administrator in F:\liming\work_space\my_work_space\su)
+ [INFO ] [] [] 2023-06-25 16:34:47.141 [main]  cn.withmes.su.server.SuServerApplication[634] - No active profile set, falling back to 1 default profile: "default"
+ [INFO ] [] [] 2023-06-25 16:34:47.422 [main]  cn.withmes.su.server.SuServerApplication[57] - Started SuServerApplication in 0.615 seconds (process running for 1.132)
+ 

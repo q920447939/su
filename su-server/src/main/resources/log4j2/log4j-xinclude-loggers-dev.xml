@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Loggers>
+    <Root level="debug" includeLocation="true" additivity="false">
+        <AppenderRef ref="obfuscateSensitiveData-CONSOLE"/>
+        <AppenderRef ref="obfuscateSensitiveData-FILE-ALL"/>
+        <!-- <AppenderRef ref="File"/>-->
+    </Root>
+    <!-- 过滤框架的一大堆debug日志-->
+    <logger name="org" level="INFO"/>
+    <logger name="_org" level="INFO"/>
+    <logger name="com.baomidou" level="INFO"/>
+    <!--<AsyncLogger name="druid.sql.Statement" level="DEBUG" additivity="false" includeLocation="true">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE-DEBUG"/>
+    </AsyncLogger>-->
+</Loggers>
