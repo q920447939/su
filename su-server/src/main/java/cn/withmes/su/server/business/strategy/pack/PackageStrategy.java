@@ -7,6 +7,7 @@ package cn.withmes.su.server.business.strategy.pack;
 
 import cn.withmes.su.server.business.enums.PackageEnums;
 import cn.withmes.su.server.business.pack.Package;
+import io.netty.channel.ChannelHandlerContext;
 
 /**
  * ClassName: PackageStrategy
@@ -16,6 +17,6 @@ import cn.withmes.su.server.business.pack.Package;
  */
 public interface PackageStrategy {
     PackageEnums getPackageEnums();
-    Package handle(Package aPackage);
+    Package handle(ChannelHandlerContext ctx, Package aPackage);
 }
 

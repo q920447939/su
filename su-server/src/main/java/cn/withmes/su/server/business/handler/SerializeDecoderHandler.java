@@ -36,7 +36,7 @@ public class SerializeDecoderHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // 将字节数组转换为ByteBuf
         Package pack = serializeStrategy.dec((byte[]) msg);
-        packageStrategyDecorate.handler(pack);
+        packageStrategyDecorate.handler(ctx,pack);
         super.channelRead(ctx, msg);
     }
 

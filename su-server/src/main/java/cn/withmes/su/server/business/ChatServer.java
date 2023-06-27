@@ -9,6 +9,7 @@ import cn.withmes.su.server.business.config.ChatServerConfig;
 import cn.withmes.su.server.business.handler.DecoderHandler;
 import cn.withmes.su.server.business.handler.GlobalExceptionHandler;
 import cn.withmes.su.server.business.handler.SerializeDecoderHandler;
+import cn.withmes.su.server.business.handler.SplitDecoderHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelFuture;
@@ -39,6 +40,8 @@ public class ChatServer {
     private ChatServerConfig chatServerConfig;
     @Resource
     private SerializeDecoderHandler serialize;
+    @Resource
+    private SplitDecoderHandler splitDecoderHandler;
 
     @Resource
     private cn.withmes.su.server.business.handler.GlobalExceptionHandler globalExceptionHandler;
@@ -59,8 +62,9 @@ public class ChatServer {
                 @Override
                 protected void initChannel(SocketChannel channel) throws Exception {
                     ChannelPipeline pipeline = channel.pipeline();
-                    pipeline.addFirst("globalExceptionHandler",globalExceptionHandler);
-                    pipeline.addFirst("decoder", applicationContext.getBean(DecoderHandler.class));
+                    pipeline.addFirst("splitDecoderHandler",applicationContext.getBean(SplitDecoderHandler.class));
+                    pipeline.addLast("globalExceptionHandler",globalExceptionHandler);
+                    pipeline.addLast("decoder", applicationContext.getBean(DecoderHandler.class));
                     pipeline.addAfter("decoder","serialize",serialize);
                 }
             });

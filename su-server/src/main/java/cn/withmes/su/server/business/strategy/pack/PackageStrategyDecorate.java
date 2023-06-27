@@ -6,6 +6,7 @@
 package cn.withmes.su.server.business.strategy.pack;
 
 import cn.withmes.su.server.business.pack.Package;
+import io.netty.channel.ChannelHandlerContext;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.springframework.context.ApplicationContext;
@@ -37,12 +38,12 @@ public class PackageStrategyDecorate {
         }
     }
 
-    public Package handler(Package aPackage) {
-        return this.handler(aPackage.getCommand(), aPackage);
+    public Package handler(ChannelHandlerContext ctx,Package aPackage) {
+        return this.handler(ctx,aPackage.getCommand(), aPackage);
     }
 
-    public Package handler(Short type, Package byteBuf) {
-        return STRATEGY_TYPE_MAP.get(type).handle(byteBuf);
+    public Package handler(ChannelHandlerContext ctx, Short type, Package byteBuf) {
+        return STRATEGY_TYPE_MAP.get(type).handle(ctx,byteBuf);
     }
 }
 
