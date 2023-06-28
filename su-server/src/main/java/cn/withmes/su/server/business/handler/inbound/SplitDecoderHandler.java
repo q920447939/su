@@ -3,12 +3,14 @@
  * @Author: leegoo
  * @Date: 2023年06月27日
  */
-package cn.withmes.su.server.business.handler;
+package cn.withmes.su.server.business.handler.inbound;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
  * @date 2023年06月27日
  */
 @Service
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SplitDecoderHandler extends LengthFieldBasedFrameDecoder {
 
     public SplitDecoderHandler() {

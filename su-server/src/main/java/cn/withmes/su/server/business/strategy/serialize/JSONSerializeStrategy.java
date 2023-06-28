@@ -7,6 +7,7 @@ package cn.withmes.su.server.business.strategy.serialize;
 
 import cn.withmes.su.server.business.enums.SerializeEnums;
 import cn.withmes.su.server.business.pack.Package;
+import com.alibaba.fastjson.JSONObject;
 import io.netty.buffer.ByteBuf;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +26,14 @@ public class JSONSerializeStrategy extends AbstractSerialize {
     }
 
     @Override
-    protected Package dec1(ByteBuf source) {
-        //return JSON.parseObject(source, SerializeEnums.JSON);
-        return null;
+    protected Package dec1(byte[] source) {
+        JSONObject jsonObject = JSONObject.parseObject(new String(source));
+        if (null == jsonObject){
+            throw new RuntimeException("json is null");
+        }
+        Package aPackage = new Package();
+        aPackage.setCommand(jsonObject.getShort("command"));
+        aPackage.setBody(jsonObject.getObject("body",Object.class));
+        return aPackage;
     }
 }

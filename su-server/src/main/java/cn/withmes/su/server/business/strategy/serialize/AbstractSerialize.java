@@ -33,7 +33,7 @@ public abstract class AbstractSerialize implements ApplicationContextAware, Seri
 
     protected abstract SerializeEnums serializeEnums();
 
-    protected abstract Package dec1(ByteBuf source);
+    protected abstract Package dec1(byte[] source);
 
     protected ApplicationContext applicationContext;
 
@@ -62,13 +62,6 @@ public abstract class AbstractSerialize implements ApplicationContextAware, Seri
 
     @Override
     public Package dec(byte[] source) {
-        JSONObject jsonObject = JSONObject.parseObject(new String(source));
-        if (null == jsonObject){
-            throw new RuntimeException("json is null");
-        }
-        Package aPackage = new Package();
-        aPackage.setCommand(jsonObject.getShort("command"));
-        aPackage.setBody(jsonObject.getObject("body",Object.class));
-        return aPackage;
+        return this.dec1(source);
     }
 }

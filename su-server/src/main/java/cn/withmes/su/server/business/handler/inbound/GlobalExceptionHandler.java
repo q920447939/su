@@ -1,4 +1,4 @@
-package cn.withmes.su.server.business.handler;
+package cn.withmes.su.server.business.handler.inbound;
 
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;

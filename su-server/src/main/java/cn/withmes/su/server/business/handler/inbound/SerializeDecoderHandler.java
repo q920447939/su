@@ -3,7 +3,7 @@
  * @Author: leegoo
  * @Date: 2023年06月25日
  */
-package cn.withmes.su.server.business.handler;
+package cn.withmes.su.server.business.handler.inbound;
 
 import cn.withmes.su.server.business.pack.Package;
 import cn.withmes.su.server.business.strategy.pack.PackageStrategyDecorate;
@@ -36,8 +36,7 @@ public class SerializeDecoderHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // 将字节数组转换为ByteBuf
         Package pack = serializeStrategy.dec((byte[]) msg);
-        packageStrategyDecorate.handler(ctx,pack);
-        super.channelRead(ctx, msg);
+        super.channelRead(ctx, pack);
     }
 
 }

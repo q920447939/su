@@ -3,7 +3,7 @@
  * @Author: leegoo
  * @Date: 2023年06月25日
  */
-package cn.withmes.su.server.business.handler;
+package cn.withmes.su.server.business.handler.inbound;
 
 import cn.withmes.su.server.business.config.ChatServerConfig;
 import io.netty.buffer.ByteBuf;

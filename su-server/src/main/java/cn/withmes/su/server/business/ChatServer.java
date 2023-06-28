@@ -6,10 +6,11 @@
 package cn.withmes.su.server.business;
 
 import cn.withmes.su.server.business.config.ChatServerConfig;
-import cn.withmes.su.server.business.handler.DecoderHandler;
-import cn.withmes.su.server.business.handler.GlobalExceptionHandler;
-import cn.withmes.su.server.business.handler.SerializeDecoderHandler;
-import cn.withmes.su.server.business.handler.SplitDecoderHandler;
+import cn.withmes.su.server.business.handler.inbound.DecoderHandler;
+import cn.withmes.su.server.business.handler.inbound.GlobalExceptionHandler;
+import cn.withmes.su.server.business.handler.inbound.LifeCycleChanelInboundHandle;
+import cn.withmes.su.server.business.handler.inbound.SerializeDecoderHandler;
+import cn.withmes.su.server.business.handler.inbound.SplitDecoderHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelFuture;
@@ -41,10 +42,10 @@ public class ChatServer {
     @Resource
     private SerializeDecoderHandler serialize;
     @Resource
-    private SplitDecoderHandler splitDecoderHandler;
+    private LifeCycleChanelInboundHandle lifeCycleChanelInboundHandle;
 
     @Resource
-    private cn.withmes.su.server.business.handler.GlobalExceptionHandler globalExceptionHandler;
+    private GlobalExceptionHandler globalExceptionHandler;
 
     private final ServerBootstrap bootstrap = new ServerBootstrap();
 
@@ -62,7 +63,8 @@ public class ChatServer {
                 @Override
                 protected void initChannel(SocketChannel channel) throws Exception {
                     ChannelPipeline pipeline = channel.pipeline();
-                    pipeline.addFirst("splitDecoderHandler",applicationContext.getBean(SplitDecoderHandler.class));
+                    pipeline.addFirst("lifeCycleChanelInboundHandle",lifeCycleChanelInboundHandle);
+                    pipeline.addLast("splitDecoderHandler",applicationContext.getBean(SplitDecoderHandler.class));
                     pipeline.addLast("globalExceptionHandler",globalExceptionHandler);
                     pipeline.addLast("decoder", applicationContext.getBean(DecoderHandler.class));
                     pipeline.addAfter("decoder","serialize",serialize);

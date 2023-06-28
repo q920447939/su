@@ -14,6 +14,7 @@ import lombok.Getter;
 public enum LoginResponseEnums implements ResponseEnumsInterface {
     LOGIN_SUCC(20001, "登录成功"),
     LOGIN_FAIL_USERNAME_OR_PASSWORD_ERROR(40001, "用户名或密码错误"),
+    LOGIN_COMMAND_IS_ERROR(40002, "登录命令异常"),
 
     ;
     private int code;

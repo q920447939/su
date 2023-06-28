@@ -8,6 +8,7 @@ package cn.withmes.su.server.login;
 import cn.withmes.su.server.ConnectBaseTest;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -25,6 +26,7 @@ public class LoginTest extends ConnectBaseTest {
 
     }
 
+    @SneakyThrows
     @Test
     public  void loginTest () {
         ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(9, 100);
@@ -41,5 +43,6 @@ public class LoginTest extends ConnectBaseTest {
         buffer.writeInt(bytes.length);
         buffer.writeBytes(bytes);
         super.channel.writeAndFlush(buffer);
+        //Thread.sleep(Integer.MAX_VALUE);
     }
 }
