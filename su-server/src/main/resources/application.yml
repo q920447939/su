@@ -15,3 +15,14 @@ mybatis-plus:
 
 logging:
   config: classpath:log4j2/log4j2-spring-${log4j-env:prod}.xml
+
+
+dubbo:
+  application:
+    name: producer-dubbo-server
+  protocol:
+    #name: dubbo
+    port: 30881
+  registry:
+    # 配置dubbo的注册中心为nacos
+    address: nacos://${spring.cloud.nacos.server-addr}

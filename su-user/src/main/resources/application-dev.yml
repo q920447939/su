@@ -14,7 +14,6 @@ spring:
   data-base-user: su_user
   username: root
   password: su@su123456.
-
   # 配置数据源
   datasource:
     hikari:
@@ -38,20 +37,4 @@ spring:
     username: ${spring.username}
     password: ${spring.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    dynamic:
-      primary: ${spring.data-base-user}
-      strict: false
-      datasource:
-        master_data_user:
-          url: jdbc:mysql://${spring.ip}:${spring.port}/${spring.data-base-user}?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&allowMultiQueries=true
-          username: ${spring.username}
-          password: ${spring.password}
-          driver-class-name: com.mysql.cj.jdbc.Driver
-  config:
-    activate:
-      on-profile: dev
-business:
-  chat-server:
-    port: 8081
-    magic: 0x410F
-    serialize: 1
+

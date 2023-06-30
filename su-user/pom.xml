@@ -9,10 +9,13 @@
         <relativePath>../su-parent/pom.xml</relativePath>
     </parent>
     <groupId>cn.withmes</groupId>
-    <artifactId>su-server</artifactId>
+    <artifactId>su-user</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>su-server</name>
-    <description>su-server</description>
+    <name>su-user</name>
+    <description>su-user</description>
+    <properties>
+        <java.version>17</java.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>cn.withemes</groupId>
@@ -44,16 +47,6 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
         </dependency>
-       <!-- <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-api</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -81,11 +74,6 @@
             <artifactId>hutool-all</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-        </dependency>
-
         <!--引入fastjson  -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -105,6 +93,11 @@
             <scope>test</scope>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-client</artifactId>
@@ -154,7 +147,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <!-- 指定SpringBoot程序的main函数入口类 -->
-                    <mainClass>cn.withmes.su.server.SuServerApplication</mainClass>
+                    <mainClass>cn.withmes.su.user.SuUserApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
@@ -176,5 +169,10 @@
     </build>
 
 
-
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <url>http://localhost:8081/nexus/content/repositories/aliyun</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>

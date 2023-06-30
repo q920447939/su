@@ -1,0 +1,20 @@
+
+dubbo:
+  application:
+    name: producer-dubbo-server
+  protocol:
+    #name: dubbo
+    port: 30880
+  registry:
+    # 配置dubbo的注册中心为nacos
+    address: nacos://${spring.cloud.nacos.server-addr}
+
+
+mybatis-plus:
+  # 开启驼峰命名规则
+  configuration:
+    map-underscore-to-camel-case: true
+    local-cache-scope: statement
+  mapper-locations: classpath:/mybatis-plus/**/*.xml
+  global-config:
+    banner: false

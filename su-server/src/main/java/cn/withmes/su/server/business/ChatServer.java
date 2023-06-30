@@ -9,6 +9,7 @@ import cn.withmes.su.server.business.config.ChatServerConfig;
 import cn.withmes.su.server.business.handler.inbound.DecoderHandler;
 import cn.withmes.su.server.business.handler.inbound.GlobalExceptionHandler;
 import cn.withmes.su.server.business.handler.inbound.LifeCycleChanelInboundHandle;
+import cn.withmes.su.server.business.handler.inbound.LoginRequestHandle;
 import cn.withmes.su.server.business.handler.inbound.SerializeDecoderHandler;
 import cn.withmes.su.server.business.handler.inbound.SplitDecoderHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -67,6 +68,7 @@ public class ChatServer {
                     pipeline.addLast("splitDecoderHandler",applicationContext.getBean(SplitDecoderHandler.class));
                     pipeline.addLast("globalExceptionHandler",globalExceptionHandler);
                     pipeline.addLast("decoder", applicationContext.getBean(DecoderHandler.class));
+                    pipeline.addLast("loginRequestHandle", applicationContext.getBean(LoginRequestHandle.class));
                     pipeline.addAfter("decoder","serialize",serialize);
                 }
             });

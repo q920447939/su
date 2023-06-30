@@ -2,7 +2,8 @@
  * @Project:
  * @Author: leegoo
  * @Date: 2023年06月25日
- */
+ *//*
+
 package cn.withmes.su.server.business.strategy.pack;
 
 import cn.withmes.su.server.business.decorate.response.ResponseWrapper;
@@ -21,13 +22,15 @@ import jakarta.annotation.Resource;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+*/
 /**
  * ClassName: LoginRequestPackageStrategy
  *
  * @author leegoo
  * @Description: 登录请求数据包处理
  * @date 2023年06月25日
- */
+ *//*
+
 @Service
 public class LoginRequestPackageStrategy implements PackageStrategy {
     @Resource
@@ -59,3 +62,4 @@ public class LoginRequestPackageStrategy implements PackageStrategy {
         return user;
     }
 }
+*/

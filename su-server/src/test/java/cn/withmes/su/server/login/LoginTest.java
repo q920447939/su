@@ -43,6 +43,6 @@ public class LoginTest extends ConnectBaseTest {
         buffer.writeInt(bytes.length);
         buffer.writeBytes(bytes);
         super.channel.writeAndFlush(buffer);
-        //Thread.sleep(Integer.MAX_VALUE);
+        Thread.sleep(Integer.MAX_VALUE);
     }
 }

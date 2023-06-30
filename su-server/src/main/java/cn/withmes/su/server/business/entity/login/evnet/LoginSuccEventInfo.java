@@ -5,6 +5,7 @@
  */
 package cn.withmes.su.server.business.entity.login.evnet;
 
+import cn.withemes.user.api.dto.UserDTO;
 import cn.withmes.su.server.business.entity.User;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +21,5 @@ import lombok.Data;
 @Builder
 @Data
 public class LoginSuccEventInfo {
-    private User user;
+    private UserDTO user;
 }
