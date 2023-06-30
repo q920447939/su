@@ -1,4 +1,9 @@
 spring:
+  data:
+    redis:
+      host: 172.18.13.56
+      port: 6379
+      password: su.su_redis123456.
   cloud:
     nacos:
       username: nacos
