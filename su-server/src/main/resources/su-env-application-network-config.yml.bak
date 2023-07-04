@@ -1,0 +1,16 @@
+business:
+  datasource:
+    ip: 127.0.0.1
+    port: 3306
+    data-base-user: su_user
+    username: root
+    password: su@su123456.
+  dubbo:
+    application:
+      name: ${spring.application.name}
+    register:
+      # 配置dubbo的注册中心为nacos
+      address: nacos://localhost:8848?namespace=71b5b416-0c7a-4bd5-b408-cd07b8cb413b
+      group: dev
+
+

@@ -28,9 +28,6 @@ spring:
         # 配置编码
         encode: UTF-8
         extension-configs:
-          - data-id: su-public-logging.yml
-            group: ${spring.cloud.nacos.env}
-            refresh: false
           - data-id: su-public-datasource.yml
             group: ${spring.cloud.nacos.env}
             refresh: false
@@ -40,9 +37,9 @@ spring:
           - data-id: su-public-spring.yml
             group: ${spring.cloud.nacos.env}
             refresh: false
+          #- data-id: su-public-logging.yml
+          #  group: ${spring.cloud.nacos.env}
+          #  refresh: false
           - data-id: su-env-application-network-config.yml
-            group: ${spring.cloud.nacos.env}
-            refresh: false
-          - data-id: su-public-redis.yml
             group: ${spring.cloud.nacos.env}
             refresh: false
