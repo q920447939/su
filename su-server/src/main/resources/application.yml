@@ -25,4 +25,5 @@ dubbo:
     port: 30881
   registry:
     # 配置dubbo的注册中心为nacos
-    address: nacos://${spring.cloud.nacos.server-addr}
+    address: nacos://localhost:8848?namespace=71b5b416-0c7a-4bd5-b408-cd07b8cb413b
+    group: dev

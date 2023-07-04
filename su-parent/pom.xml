@@ -29,7 +29,7 @@
         <spring-boot.version>3.0.5</spring-boot.version>
         <spring-cloud.version>2022.0.2</spring-cloud.version>
         <spring-cloud-alibaba.version>2022.0.0.0-RC1</spring-cloud-alibaba.version>
-        <dubbo.version>3.2.0-beta.6</dubbo.version>
+        <dubbo.version>3.2.3</dubbo.version>
     </properties>
 
     <dependencyManagement>
@@ -199,7 +199,28 @@
                 <version>3.2.2</version>
             </dependency>
 
+            <!-- https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-starter-alibaba-nacos-config -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+                <version>2022.0.0.0-RC2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+                <version>2022.0.0.0-RC2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-bootstrap</artifactId>
+                <version>4.0.0</version>
+            </dependency>
+
         </dependencies>
+
+
     </dependencyManagement>
 
     <build>

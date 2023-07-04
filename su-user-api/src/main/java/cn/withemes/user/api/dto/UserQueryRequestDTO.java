@@ -8,6 +8,8 @@ package cn.withemes.user.api.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * ClassName: UserQueryRequestDTO
  *
@@ -17,7 +19,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class UserQueryRequestDTO {
+public class UserQueryRequestDTO implements Serializable {
     private String username;
     private String password;
 }

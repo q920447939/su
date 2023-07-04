@@ -8,8 +8,10 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.CacheErrorHandler;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -26,8 +28,8 @@ import java.time.Duration;
 
 @Slf4j
 @Configuration
-@EnableCaching
 @RequiredArgsConstructor
+@RefreshScope
 public class RedisConfig implements CachingConfigurer {
 
     @Value("${spring.redis.time-to-live}")
@@ -50,6 +52,7 @@ public class RedisConfig implements CachingConfigurer {
 
 
     @Bean
+    @Primary
     LettuceConnectionFactory lettuceConnectionFactory() {
         // 连接池配置
         GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
@@ -81,12 +84,6 @@ public class RedisConfig implements CachingConfigurer {
         return redisTemplate;
     }
 
-    @Override
-    @Bean
-    public RedisCacheManager cacheManager() {
-        return RedisCacheManager.builder(this.lettuceConnectionFactory()).cacheDefaults(this.cacheConfiguration())
-                .build();
-    }
 
     @Bean
     public RedisCacheConfiguration cacheConfiguration() {

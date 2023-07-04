@@ -1,14 +1,14 @@
 spring:
   cloud:
     nacos:
-      username: nacos
-      password: nacos
+      #username: nacos
+      #password: nacos
       server-addr: 127.0.0.1:8848
-      config:
-        group: sams
-        prefix: application
-        file-extension: yaml
-        namespace: 1dc5555a-c917-4ea5-a815-059ca88b9b37
+      #config:
+      #  group: sams
+      #  prefix: application
+      #  file-extension: yaml
+      #  namespace: 1dc5555a-c917-4ea5-a815-059ca88b9b37
   ip: 127.0.0.1
   port: 3306
   data-base-user: su_user

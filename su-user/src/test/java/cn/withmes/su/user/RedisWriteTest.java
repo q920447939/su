@@ -25,6 +25,6 @@ public class RedisWriteTest extends SpringBootTestEnvBaseTest{
     @Test
     public void write () {
         String key = IdUtil.fastSimpleUUID();
-        Assert.assertTrue(redisUtil.set(key, key,1000*60));
+        Assert.assertTrue(redisUtil.set(key, key,60));
     }
 }
