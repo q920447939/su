@@ -57,7 +57,7 @@ public class LoginRequestHandle extends SimpleChannelInboundHandler<Package> {
         }
         ctx.pipeline().remove(this);
         LoginUtil.markAsLogin(ctx.channel());
-        applicationContext.publishEvent(LoginSuccEventInfo.builder().user(user).build());
+        applicationContext.publishEvent(LoginSuccEventInfo.builder().user(user).channel(ctx.channel()).build());
         ctx.writeAndFlush(ResponseWrapper.loginSuccResponse(LoginResponseEnums.LOGIN_SUCC));
         super.channelRead(ctx, msg);
     }

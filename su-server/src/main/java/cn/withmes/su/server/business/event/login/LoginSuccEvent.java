@@ -5,7 +5,10 @@
  */
 package cn.withmes.su.server.business.event.login;
 
+import cn.withemes.user.api.dto.UserDTO;
 import cn.withmes.su.server.business.entity.login.evnet.LoginSuccEventInfo;
+import cn.withmes.su.server.business.utils.channel.Session;
+import cn.withmes.su.server.business.utils.channel.SessionUtil;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -27,7 +30,9 @@ public class LoginSuccEvent {
     @EventListener
     public void loginSucc(@NonNull LoginSuccEventInfo event) {
         log.info("【用户登录成功】 获取到的数据源 event={}", event);
-        //TODO
-        //UserCacheHandle.addUserInfoEntity(BeanUtil.copyProperties(event, UserInfoEntity.class));
+        Session session = new Session();
+        UserDTO user = event.getUser();
+        session.setUserId(user.getUserId()).setUserName(user.getUserName())	;
+        SessionUtil.bindSession(session,event.getChannel());
     }
 }
