@@ -8,6 +8,7 @@ package cn.withmes.su.server.business.utils.redis;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.withemes.common.redis.RedisUtil;
 import com.alibaba.nacos.api.config.annotation.NacosValue;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedisUtils {
 
-    @NacosValue(value = "spring.application.name", autoRefreshed = true)
+    @Value(value = "spring.application.name")
     private String applicationName;
 
     /**

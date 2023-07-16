@@ -37,9 +37,12 @@ spring:
           - data-id: su-public-spring.yml
             group: ${spring.cloud.nacos.env}
             refresh: false
-          #- data-id: su-public-logging.yml
-          #  group: ${spring.cloud.nacos.env}
-          #  refresh: false
+          - data-id: su-public-logging.yml
+            group: ${spring.cloud.nacos.env}
+            refresh: false
+          - data-id: su-public-redis.yml
+            group: ${spring.cloud.nacos.env}
+            refresh: false
           - data-id: su-env-application-network-config.yml
             group: ${spring.cloud.nacos.env}
             refresh: false

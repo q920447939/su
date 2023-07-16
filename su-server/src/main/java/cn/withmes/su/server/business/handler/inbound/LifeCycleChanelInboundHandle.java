@@ -35,9 +35,9 @@ public class LifeCycleChanelInboundHandle extends ChannelInboundHandlerAdapter {
         super.channelReadComplete(ctx);
     }
 
-    /*@Override
+    @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         log.error("Exception caught", cause);
         ctx.close();
-    }*/
+    }
 }

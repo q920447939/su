@@ -9,9 +9,11 @@ import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.withmes.su.server.business.constant.redis.RedisKeyConstant;
+import cn.withmes.su.server.business.utils.LoginUtil;
 import cn.withmes.su.server.business.utils.redis.RedisUtils;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2023/07/11
  */
 @Slf4j
+@Service
 public class SessionUtil {
     /**
      * 用户id通道映射
@@ -43,18 +46,24 @@ public class SessionUtil {
         if (null == channelSet) {
             String key = String.format(RedisKeyConstant.USER_BIND_SESSION_KEY_PRE, userId);
             RedisUtils redisUtils = SpringUtil.getBean(RedisUtils.class);
+            boolean getLockSucc = false;
             try {
-                while (!redisUtils.acquireLock(key, 60L)) {
+                while ( !(getLockSucc = redisUtils.acquireLock(key, 60L)) ) {
                     log.warn("【绑定会话】 acquire lock failed,userId={}", userId);
                     ThreadUtil.safeSleep(1000L);
                 }
-                channelSet = new ConcurrentHashSet<>();
+                channelSet = userIdChannelMap.get(userId);
+                if (null == channelSet){
+                    channelSet = new ConcurrentHashSet<>();
+                }
                 channelSet.add(channel);
                 userIdChannelMap.put(userId, channelSet);
             } catch (Exception ex) {
                 log.error("【绑定会话】 bind session err,userId={}", userId, ex);
             } finally {
-                redisUtils.releaseLock(key);
+                if (getLockSucc){
+                    redisUtils.releaseLock(key);
+                }
             }
         }
         channel.attr(Attributes.SESSION).set(session);

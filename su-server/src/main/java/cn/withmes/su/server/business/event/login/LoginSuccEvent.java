@@ -7,8 +7,10 @@ package cn.withmes.su.server.business.event.login;
 
 import cn.withemes.user.api.dto.UserDTO;
 import cn.withmes.su.server.business.entity.login.evnet.LoginSuccEventInfo;
+import cn.withmes.su.server.business.utils.LoginUtil;
 import cn.withmes.su.server.business.utils.channel.Session;
 import cn.withmes.su.server.business.utils.channel.SessionUtil;
+import io.netty.channel.Channel;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -26,13 +28,15 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class LoginSuccEvent {
-    @Async
+    //@Async
     @EventListener
     public void loginSucc(@NonNull LoginSuccEventInfo event) {
         log.info("【用户登录成功】 获取到的数据源 event={}", event);
         Session session = new Session();
         UserDTO user = event.getUser();
         session.setUserId(user.getUserId()).setUserName(user.getUserName())	;
-        SessionUtil.bindSession(session,event.getChannel());
+        Channel channel = event.getChannel();
+        SessionUtil.bindSession(session, channel);
+        LoginUtil.markAsLogin(channel);
     }
 }
