@@ -6,7 +6,7 @@
 package cn.withmes.su.server.business.decorate.response;
 
 import cn.withmes.su.server.business.entity.response.ResponseData;
-import cn.withmes.su.server.business.enums.ResponseTypeEnums;
+import cn.withmes.su.server.business.enums.PackageEnums;
 import cn.withmes.su.server.business.enums.response.ResponseEnumsInterface;
 import lombok.Data;
 
@@ -29,7 +29,7 @@ public class ResponseWrapper {
      */
     public static ResponseData loginSuccResponse(ResponseEnumsInterface responseEnumsInterface) {
         ResponseData responseData = new ResponseData();
-        responseData.setType((short) ResponseTypeEnums.LOGIN.getType());
+        responseData.setType((short) PackageEnums.LOGIN.getType());
         responseData.setCode(responseEnumsInterface.code());
         responseData.setMessage(responseEnumsInterface.desc());
         return responseData;
@@ -37,9 +37,17 @@ public class ResponseWrapper {
 
     public static ResponseData loginFailResponse(ResponseEnumsInterface responseEnumsInterface) {
         ResponseData responseData = new ResponseData();
-        responseData.setType((short) ResponseTypeEnums.LOGIN.getType());
+        responseData.setType((short) PackageEnums.LOGIN.getType());
         responseData.setCode(responseEnumsInterface.code());
         responseData.setMessage(responseEnumsInterface.desc());
+        return responseData;
+    }
+
+    public static ResponseData chatResponse(ResponseEnumsInterface responseEnumsInterface,String message) {
+        ResponseData responseData = new ResponseData();
+        responseData.setType((short) PackageEnums.CHAT.getType());
+        responseData.setCode(responseEnumsInterface.code());
+        responseData.setMessage(message);
         return responseData;
     }
 }

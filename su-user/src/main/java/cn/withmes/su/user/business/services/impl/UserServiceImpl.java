@@ -29,6 +29,6 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         User user =
                 super.baseMapper.selectOne(
                         new LambdaQueryWrapper<User>().eq(User::getUserName, userQueryRequestDTO.getUsername()).eq(User::getPassword, userQueryRequestDTO.getPassword()).eq(User::getStatus, UserStatusEnums.STATUS_NORMAL.getStatus()));
-        return BeanUtil.copyProperties(user,UserDTO.class);
+        return null == user ? null : BeanUtil.copyProperties(user,UserDTO.class);
     }
 }

@@ -1,5 +1,6 @@
 package cn.withemes.common.config;
 
+import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,10 +71,12 @@ public class RedisConfig implements CachingConfigurer {
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        //redisTemplate.setKeySerializer(new StringRedisSerializer());
+        GenericFastJsonRedisSerializer serializer = new GenericFastJsonRedisSerializer();
+        redisTemplate.setKeySerializer(serializer);
         redisTemplate.setHashKeySerializer(new GenericToStringSerializer<>(Object.class));
         redisTemplate.setHashValueSerializer(new JdkSerializationRedisSerializer());
-        redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
+        redisTemplate.setValueSerializer(serializer);
         redisTemplate.setConnectionFactory(this.lettuceConnectionFactory());
         return redisTemplate;
     }

@@ -7,6 +7,7 @@ package cn.withmes.su.server.business.entity.login.evnet;
 
 import cn.withemes.user.api.dto.UserDTO;
 import cn.withmes.su.server.business.entity.User;
+import com.alibaba.fastjson.JSONObject;
 import io.netty.channel.Channel;
 import lombok.Builder;
 import lombok.Data;
@@ -24,4 +25,9 @@ import lombok.Data;
 public class LoginSuccEventInfo {
     private UserDTO user;
     private Channel channel;
+
+    @Override
+    public String toString() {
+        return JSONObject.toJSONString(this);
+    }
 }

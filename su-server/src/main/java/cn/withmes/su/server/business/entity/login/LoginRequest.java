@@ -16,7 +16,6 @@ import lombok.Data;
  */
 @Data
 public class LoginRequest {
-    private long uid;
     private String userName;
     private String password;
 }

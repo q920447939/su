@@ -5,6 +5,7 @@
  */
 package cn.withmes.su.server.business.handler.inbound;
 
+import cn.withemes.common.protocol.BytBufUtils;
 import cn.withemes.user.api.dto.UserDTO;
 import cn.withemes.user.api.dto.UserQueryRequestDTO;
 import cn.withemes.user.api.facade.UserInfoFacade;
@@ -16,8 +17,12 @@ import cn.withmes.su.server.business.enums.response.login.LoginResponseEnums;
 import cn.withmes.su.server.business.pack.Package;
 import cn.withmes.su.server.business.utils.LoginUtil;
 import com.alibaba.fastjson.JSONObject;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.DefaultChannelPromise;
 import io.netty.channel.SimpleChannelInboundHandler;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +30,8 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * ClassName: LoginRequest
@@ -37,33 +44,54 @@ import org.springframework.stereotype.Service;
 @ChannelHandler.Sharable
 @Scope("prototype")
 @Slf4j
-public class LoginRequestHandle extends SimpleChannelInboundHandler<Package> {
+public class LoginRequestHandle extends ChannelInboundHandlerAdapter {
     @DubboReference
     private UserInfoFacade userInfoFacade;
     @Resource
     private ApplicationContext applicationContext;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Package msg) throws Exception {
-        if (PackageEnums.LOGIN.getType() != msg.getCommand()) {
-            ctx.writeAndFlush(ResponseWrapper.loginFailResponse(LoginResponseEnums.LOGIN_COMMAND_IS_ERROR));
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        log.info("收到一个新连接，但是还没有登录 {}",ctx.channel().id());
+        super.channelActive(ctx);
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        if (!(msg instanceof Package packget)) {
             return;
         }
-        LoginRequest loginRequest = JSONObject.toJavaObject((JSONObject) msg.getBody(), LoginRequest.class);
+        if (PackageEnums.LOGIN.getType() != packget.getCommand()) {
+            ctx.writeAndFlush(BytBufUtils.objToByteBuf(ResponseWrapper.loginFailResponse(LoginResponseEnums.LOGIN_COMMAND_IS_ERROR)));
+            return;
+        }
+        LoginRequest loginRequest = JSONObject.toJavaObject((JSONObject) packget.getBody(), LoginRequest.class);
         UserDTO user = userInfoFacade.getUserInfo(UserQueryRequestDTO.builder().username(loginRequest.getUserName()).password(loginRequest.getPassword()).build());
         if (null == user) {
-            ctx.writeAndFlush(ResponseWrapper.loginFailResponse(LoginResponseEnums.LOGIN_FAIL_USERNAME_OR_PASSWORD_ERROR));
+            ctx.writeAndFlush(BytBufUtils.objToByteBuf(ResponseWrapper.loginFailResponse(LoginResponseEnums.LOGIN_FAIL_USERNAME_OR_PASSWORD_ERROR)));
             return;
         }
-        ctx.pipeline().remove(this);
         applicationContext.publishEvent(LoginSuccEventInfo.builder().user(user).channel(ctx.channel()).build());
-        ctx.writeAndFlush(ResponseWrapper.loginSuccResponse(LoginResponseEnums.LOGIN_SUCC));
+        ChannelFuture future = ctx.writeAndFlush(BytBufUtils.objToByteBuf(ResponseWrapper.loginSuccResponse(LoginResponseEnums.LOGIN_SUCC)));
+        future.addListener((ChannelFuture futureListener) -> {
+            log.info("响应结果,id= {}",ctx.channel().id());
+            log.info("[NettyEchoServerHandler] 写回后，msg");
+        });
+        //ctx.pipeline().remove(this);
         super.channelRead(ctx, msg);
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        //super.handlerRemoved(ctx);
-        log.info("无登录验证，强制关闭连接！");
+        log.info("handlerRemoved");
+        super.handlerRemoved(ctx);
+        //log.info("无登录验证，强制关闭连接！");
+    }
+
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        log.info("channelInactive");
+        super.channelInactive(ctx);
     }
 }

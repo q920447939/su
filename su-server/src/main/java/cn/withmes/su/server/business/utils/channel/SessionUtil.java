@@ -7,14 +7,16 @@ package cn.withmes.su.server.business.utils.channel;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.thread.ThreadUtil;
-import cn.hutool.extra.spring.SpringUtil;
+import cn.withemes.common.redis.RedisUtil;
 import cn.withmes.su.server.business.constant.redis.RedisKeyConstant;
-import cn.withmes.su.server.business.utils.LoginUtil;
-import cn.withmes.su.server.business.utils.redis.RedisUtils;
+import cn.withmes.su.server.business.utils.redis.RedisUtilsWrapper;
 import io.netty.channel.Channel;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,10 +30,19 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Service
 public class SessionUtil {
+    @Resource
+    private RedisUtilsWrapper redisUtilsWrapper;
+
+    /**
+     * 用户会话到期秒数,默认10分钟
+     */
+    @Value("${business.chat-server.user-session-expire-second:600}")
+    private int userSessionExpireSecond;
     /**
      * 用户id通道映射
      */
     private static final Map<Long, Set<Channel>> userIdChannelMap = new ConcurrentHashMap<>();
+
 
 
     /**
@@ -40,32 +51,12 @@ public class SessionUtil {
      * @param session 会话
      * @param channel 通道
      */
-    public static void bindSession(Session session, Channel channel) {
+    public  void bindSession(Session session, Channel channel) {
         Long userId = session.getUserId();
-        Set<Channel> channelSet = userIdChannelMap.get(userId);
-        if (null == channelSet) {
-            String key = String.format(RedisKeyConstant.USER_BIND_SESSION_KEY_PRE, userId);
-            RedisUtils redisUtils = SpringUtil.getBean(RedisUtils.class);
-            boolean getLockSucc = false;
-            try {
-                while ( !(getLockSucc = redisUtils.acquireLock(key, 60L)) ) {
-                    log.warn("【绑定会话】 acquire lock failed,userId={}", userId);
-                    ThreadUtil.safeSleep(1000L);
-                }
-                channelSet = userIdChannelMap.get(userId);
-                if (null == channelSet){
-                    channelSet = new ConcurrentHashSet<>();
-                }
-                channelSet.add(channel);
-                userIdChannelMap.put(userId, channelSet);
-            } catch (Exception ex) {
-                log.error("【绑定会话】 bind session err,userId={}", userId, ex);
-            } finally {
-                if (getLockSucc){
-                    redisUtils.releaseLock(key);
-                }
-            }
-        }
+        String userSessionSetKey = String.format(RedisKeyConstant.USER_CHANNEL_SESSION_SET_PRE, userId);
+        RedisUtil redisUtil = redisUtilsWrapper.getRedisUtil();
+        //Set<Object> userChannelSet = redisUtil.sGet(userSessionSetKey);
+        redisUtil.sSetAndTime(userSessionSetKey,userSessionExpireSecond*1000L,channel);
         channel.attr(Attributes.SESSION).set(session);
     }
 
@@ -101,13 +92,14 @@ public class SessionUtil {
         return channel.attr(Attributes.SESSION).get();
     }
 
-    /*    *//**
-     * 获得通道
+
+    /**
+     * 获得用户id通道映射
      *
      * @param userId 用户id
-     * @return {@link Channel}
-     *//*
-    public static Channel getChannel(String userId) {
+     * @return {@link Set}<{@link Channel}>
+     */
+    public Set<Channel> getUserIdChannelMap(Long userId) {
         return userIdChannelMap.get(userId);
-    }*/
+    }
 }

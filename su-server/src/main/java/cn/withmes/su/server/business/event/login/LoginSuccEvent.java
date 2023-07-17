@@ -11,6 +11,7 @@ import cn.withmes.su.server.business.utils.LoginUtil;
 import cn.withmes.su.server.business.utils.channel.Session;
 import cn.withmes.su.server.business.utils.channel.SessionUtil;
 import io.netty.channel.Channel;
+import jakarta.annotation.Resource;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -28,6 +29,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class LoginSuccEvent {
+    @Resource
+    private SessionUtil sessionUtil;
     //@Async
     @EventListener
     public void loginSucc(@NonNull LoginSuccEventInfo event) {
@@ -36,7 +39,7 @@ public class LoginSuccEvent {
         UserDTO user = event.getUser();
         session.setUserId(user.getUserId()).setUserName(user.getUserName())	;
         Channel channel = event.getChannel();
-        SessionUtil.bindSession(session, channel);
+        sessionUtil.bindSession(session, channel);
         LoginUtil.markAsLogin(channel);
     }
 }

@@ -5,9 +5,8 @@
  */
 package cn.withmes.su.server.business.utils.redis;
 
-import cn.hutool.extra.spring.SpringUtil;
 import cn.withemes.common.redis.RedisUtil;
-import com.alibaba.nacos.api.config.annotation.NacosValue;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,10 +19,12 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-public class RedisUtils {
+public class RedisUtilsWrapper {
 
     @Value(value = "spring.application.name")
     private String applicationName;
+    @Resource
+    private RedisUtil redisUtil;
 
     /**
      * 获取分布式锁
@@ -33,17 +34,21 @@ public class RedisUtils {
      * @return true表示获取锁成功，false表示获取锁失败
      */
     public boolean acquireLock(String lockKey, long expireTime) {
-        return SpringUtil.getBean(RedisUtil.class).acquireLock(lockKey, applicationName, expireTime);
+        return redisUtil.acquireLock(lockKey, applicationName, expireTime);
     }
 
     /**
      * 释放分布式锁
+     *
      * @param lockKey 锁的key
      * @return true表示释放锁成功，false表示释放锁失败
      */
     public boolean releaseLock(String lockKey) {
-        return SpringUtil.getBean(RedisUtil.class).releaseLock(lockKey, applicationName);
+        return redisUtil.releaseLock(lockKey, applicationName);
+    }
 
+    public RedisUtil getRedisUtil(){
+        return this.redisUtil;
     }
 
 }

@@ -6,7 +6,8 @@ import lombok.NonNull;
 
 @Getter
 public enum PackageEnums {
-    LOGIN(1, "登录");
+    LOGIN(1, "登录"),
+    CHAT(2, "聊天");
     private int type;
     private String desc;
 
