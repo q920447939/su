@@ -6,6 +6,7 @@
 package cn.withmes.su.server.business.handler.inbound;
 
 import cn.withemes.common.protocol.BytBufUtils;
+import cn.withemes.common.protocol.ChannelResponseWriteDecorator;
 import cn.withemes.user.api.dto.UserDTO;
 import cn.withemes.user.api.dto.UserQueryRequestDTO;
 import cn.withemes.user.api.facade.UserInfoFacade;
@@ -15,23 +16,17 @@ import cn.withmes.su.server.business.entity.login.evnet.LoginSuccEventInfo;
 import cn.withmes.su.server.business.enums.PackageEnums;
 import cn.withmes.su.server.business.enums.response.login.LoginResponseEnums;
 import cn.withmes.su.server.business.pack.Package;
-import cn.withmes.su.server.business.utils.LoginUtil;
 import com.alibaba.fastjson.JSONObject;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.DefaultChannelPromise;
-import io.netty.channel.SimpleChannelInboundHandler;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * ClassName: LoginRequest
@@ -49,6 +44,8 @@ public class LoginRequestHandle extends ChannelInboundHandlerAdapter {
     private UserInfoFacade userInfoFacade;
     @Resource
     private ApplicationContext applicationContext;
+    @Resource
+    private ChannelResponseWriteDecorator channelResponseWriteDecorator;
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -62,13 +59,13 @@ public class LoginRequestHandle extends ChannelInboundHandlerAdapter {
             return;
         }
         if (PackageEnums.LOGIN.getType() != packget.getCommand()) {
-            ctx.writeAndFlush(BytBufUtils.objToByteBuf(ResponseWrapper.loginFailResponse(LoginResponseEnums.LOGIN_COMMAND_IS_ERROR)));
+            channelResponseWriteDecorator.writeAndFlush(ctx, ResponseWrapper.loginFailResponse(LoginResponseEnums.LOGIN_COMMAND_IS_ERROR));
             return;
         }
         LoginRequest loginRequest = JSONObject.toJavaObject((JSONObject) packget.getBody(), LoginRequest.class);
         UserDTO user = userInfoFacade.getUserInfo(UserQueryRequestDTO.builder().username(loginRequest.getUserName()).password(loginRequest.getPassword()).build());
         if (null == user) {
-            ctx.writeAndFlush(BytBufUtils.objToByteBuf(ResponseWrapper.loginFailResponse(LoginResponseEnums.LOGIN_FAIL_USERNAME_OR_PASSWORD_ERROR)));
+            channelResponseWriteDecorator.writeAndFlush(ctx, ResponseWrapper.loginFailResponse(LoginResponseEnums.LOGIN_FAIL_USERNAME_OR_PASSWORD_ERROR));
             return;
         }
         applicationContext.publishEvent(LoginSuccEventInfo.builder().user(user).channel(ctx.channel()).build());

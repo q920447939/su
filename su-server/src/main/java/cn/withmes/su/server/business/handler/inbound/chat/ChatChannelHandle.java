@@ -40,7 +40,7 @@ public class ChatChannelHandle extends ChannelInboundHandlerAdapter {
             return;
         }
         ChatRequest chatRequest = JSONObject.toJavaObject((JSONObject) packget.getBody(), ChatRequest.class);
-        if (null == chatRequest.getChatType() || null == ChatEnums.getEnumsByType(chatRequest.getChatType())) {
+        if (null == chatRequest || null == chatRequest.getChatType() || null == ChatEnums.getEnumsByType(chatRequest.getChatType())) {
             log.warn("未获取chat 枚举类型");
             super.channelRead(ctx, msg);
             return;
