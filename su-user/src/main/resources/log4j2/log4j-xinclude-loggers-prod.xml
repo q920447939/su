@@ -13,4 +13,8 @@
     <logger name="org" level="INFO"/>
     <logger name="_org" level="INFO"/>
     <logger name="com.baomidou" level="INFO"/>
+    <logger name="com.baomidou" level="INFO"/>
+    <logger name="com.alibaba.nacos" level="INFO"/>
+    <logger name="sun.rmi" level="INFO"/>
+    <logger name="javax.management.remote" level="INFO"/>
 </loggers>
