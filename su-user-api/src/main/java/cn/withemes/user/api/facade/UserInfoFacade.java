@@ -8,6 +8,8 @@ package cn.withemes.user.api.facade;
 import cn.withemes.user.api.dto.UserDTO;
 import cn.withemes.user.api.dto.UserQueryRequestDTO;
 
+import java.util.List;
+
 /**
  * 用户信息门面
  * ClassName: UserInfoFacade
@@ -24,4 +26,13 @@ public interface UserInfoFacade {
      * @return {@link UserDTO}
      */
     UserDTO getUserInfo(UserQueryRequestDTO userQueryRequestDTO);
+
+
+    /**
+     * 获得用户朋友
+     *
+     * @param userId 用户id
+     * @return {@link List}<{@link UserDTO}>
+     */
+    List<UserDTO> getUserFriend(Long userId);
 }

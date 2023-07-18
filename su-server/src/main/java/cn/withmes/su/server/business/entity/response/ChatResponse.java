@@ -10,10 +10,10 @@ import lombok.Data;
 
 
 /**
- * 聊天反应
+ * 聊天响应
  *
  * @author liming
- * @date 2023/07/16
+ * @date 2023/07/18
  */
 @Data
 @Builder

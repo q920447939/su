@@ -26,6 +26,11 @@ public class JSONSerializeStrategy extends AbstractSerialize {
     }
 
     @Override
+    protected Object enc1(Object source) {
+        return JSONObject.toJSONString(source);
+    }
+
+    @Override
     protected Package dec1(byte[] source) {
         JSONObject jsonObject = JSONObject.parseObject(new String(source));
         if (null == jsonObject){
@@ -36,4 +41,6 @@ public class JSONSerializeStrategy extends AbstractSerialize {
         aPackage.setBody(jsonObject.getObject("body",Object.class));
         return aPackage;
     }
+
+
 }

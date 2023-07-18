@@ -17,6 +17,7 @@ import cn.withmes.su.server.business.entity.login.evnet.LoginSuccEventInfo;
 import cn.withmes.su.server.business.enums.PackageEnums;
 import cn.withmes.su.server.business.enums.response.login.LoginResponseEnums;
 import cn.withmes.su.server.business.handler.inbound.chat.ChatChannelHandle;
+import cn.withmes.su.server.business.handler.inbound.userlist.UserChannelHandle;
 import cn.withmes.su.server.business.pack.Package;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.channel.ChannelFuture;
@@ -74,6 +75,7 @@ public class LoginRequestHandle extends ChannelInboundHandlerAdapter {
         channelResponseWriteDecorator.writeAndFlush(ctx,ResponseWrapper.loginSuccResponse(LoginResponseEnums.LOGIN_SUCC));
         ctx.pipeline().remove(this);
         ctx.pipeline().addLast("chat", SpringUtil.getBean(ChatChannelHandle.class));
+        ctx.pipeline().addLast("userlist", SpringUtil.getBean(UserChannelHandle.class));
         super.channelRead(ctx, msg);
     }
 

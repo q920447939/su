@@ -16,6 +16,6 @@ import io.netty.buffer.ByteBuf;
  * @date 2023年06月25日
  */
 public interface SerializeStrategy {
-    Package enc(ByteBuf source);
+    Object enc(Object source);
     Package dec(byte[] source);
 }

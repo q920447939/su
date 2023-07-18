@@ -12,8 +12,11 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class ChatClient {
@@ -49,7 +52,7 @@ public class ChatClient {
                 System.out.println("请输入:");
                 System.out.println("1 - 登录");
                 System.out.println("2 - 单聊");
-                System.out.println("3 - 群发消息");
+                System.out.println("3 - 获取用户列表");
 
                 String input = scanner.next();
 
@@ -111,6 +114,20 @@ public class ChatClient {
                     buffer.writeBytes(bytes);
                     // 编码消息对象
                     channel.writeAndFlush(buffer);
+                } else if ("3".equals(input)) {
+                    // 发送消息逻辑
+                    System.out.print("获取用户好友列表开始");
+                    Package packages = new Package();
+                    packages.setCommand((short)3);
+                    UserListRequest  userListRequest = new UserListRequest();
+                    userListRequest.setTypeList(Arrays.asList(1));
+                    packages.setBody(userListRequest);
+                    String msg = JSONObject.toJSONString(packages);
+                    byte[] bytes = msg.getBytes(StandardCharsets.UTF_8);
+                    buffer.writeInt(bytes.length);
+                    buffer.writeBytes(bytes);
+                    // 编码消息对象
+                    channel.writeAndFlush(buffer);
                 } else {
                     System.out.println("无效输入!");
                 }
@@ -149,4 +166,11 @@ class LoginRequest {
     private String userName;
     private String password;
 }
+
+@Data
+@Accessors(chain = true)
+class UserListRequest {
+    private List<Integer> typeList;
+}
+
 

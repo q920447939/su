@@ -19,7 +19,7 @@ import lombok.Data;
 public class ResponseData {
     private short type;
     private int code;
-    private String message;
+    private Object message;
 
 
 

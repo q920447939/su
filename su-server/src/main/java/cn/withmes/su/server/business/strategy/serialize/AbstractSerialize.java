@@ -33,6 +33,7 @@ public abstract class AbstractSerialize implements ApplicationContextAware, Seri
 
     protected abstract SerializeEnums serializeEnums();
 
+    protected abstract  Object enc1(Object source) ;
     protected abstract Package dec1(byte[] source);
 
     protected ApplicationContext applicationContext;
@@ -56,8 +57,8 @@ public abstract class AbstractSerialize implements ApplicationContextAware, Seri
     }
 
     @Override
-    public Package enc(ByteBuf source) {
-        return null;
+    public Object enc(Object source) {
+        return enc1(source);
     }
 
     @Override
