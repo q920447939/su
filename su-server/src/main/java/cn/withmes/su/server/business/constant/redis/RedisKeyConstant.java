@@ -19,5 +19,6 @@ public class RedisKeyConstant {
     /**
      * 用户通道会话缓存key
      */
-    public static final String USER_CHANNEL_SESSION_SET_PRE = "USER:CHANNEL:SESSION_SET_%s";
+    public static final String USER_CHANNEL_SESSION_SET_PRE = "USER:CHANNEL:RELATION:%s";
+    public static final String USER_CHANNEL_RELATION_PRE = "USER_CHANNEL_RELATION_%s";
 }

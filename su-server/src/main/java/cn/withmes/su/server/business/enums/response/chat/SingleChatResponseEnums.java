@@ -15,6 +15,7 @@ public enum SingleChatResponseEnums implements ResponseEnumsInterface {
     CHAT_MESSAGE_SUCCESS(20001, "聊天信息发送成功"),
     CHAT_MESSAGE_SUCCESS1(20002, "聊天信息发送成功（自生）"),
     CHAT_TO_USER_OFFLINE(40001, "用户不在线"),
+    UN_LOGIN(40002, "未登录"),
 
     ;
     private int code;

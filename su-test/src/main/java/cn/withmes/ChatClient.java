@@ -48,12 +48,15 @@ public class ChatClient {
                 // 打印提示菜单
                 System.out.println("请输入:");
                 System.out.println("1 - 登录");
-                System.out.println("2 - 发送消息");
+                System.out.println("2 - 单聊");
+                System.out.println("3 - 群发消息");
 
                 String input = scanner.next();
 
                 ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer();
                 buffer.writeShort(0x410F);
+                //版本号
+                buffer.writeShort(1);
                 if ("1".equals(input)) {
                     // 登录逻辑
                     System.out.print("账号:");
@@ -67,7 +70,6 @@ public class ChatClient {
                     packages.setCommand((short) 1);
                     packages.setBody(request);
 
-                    buffer.writeShort(1);
                     String msg = JSONObject.toJSONString(packages);
                     byte[] bytes = msg.getBytes(StandardCharsets.UTF_8);
                     buffer.writeInt(bytes.length);
@@ -77,19 +79,41 @@ public class ChatClient {
 
                 } else if ("2".equals(input)) {
                     // 发送消息逻辑
-                    System.out.print("消息内容:");
-                    String content = scanner.next();
-
+                    System.out.print("输入发送者id@消息内容(例如：123@你好)");
+                    String chatInput = scanner.next();
+                    if ("".equals(chatInput)){
+                        System.out.println("消息内容不能为空");
+                        continue;
+                    }
+                    String[] chatInputArray = chatInput.split("@");
+                    if (chatInputArray.length != 2){
+                        System.out.println("消息内容格式错误");
+                        continue;
+                    }
+                    String senderId = chatInputArray[0];
+                    String context = chatInputArray[1];
                     // 构造聊天消息对象
-                    ChatRequest message = new ChatRequest(content);
+                    Long toUid = null;
+                    try {
+                        toUid = Long.valueOf(senderId);
+                    } catch (NumberFormatException e) {
+                        System.out.println("输入接收者id错误");
+                        continue;
+                    }
+                    ChatRequest message = new ChatRequest(1, toUid,context);
 
+                    Package packages = new Package();
+                    packages.setCommand((short)2);
+                    packages.setBody(message);
+                    String msg = JSONObject.toJSONString(packages);
+                    byte[] bytes = msg.getBytes(StandardCharsets.UTF_8);
+                    buffer.writeInt(bytes.length);
+                    buffer.writeBytes(bytes);
                     // 编码消息对象
-                    channel.writeAndFlush(message);
-
+                    channel.writeAndFlush(buffer);
                 } else {
                     System.out.println("无效输入!");
                 }
-
             }
 
         } finally {
@@ -106,8 +130,9 @@ public class ChatClient {
 @Data
 @AllArgsConstructor
 class ChatRequest {
-    String content;
-    // 构造方法、getter/setter略
+    private Integer chatType;
+    private Long toUid;
+    private String message;
 }
 
 

@@ -5,6 +5,7 @@
  */
 package cn.withmes.su.server.business.handler.inbound;
 
+import cn.hutool.extra.spring.SpringUtil;
 import cn.withemes.common.protocol.BytBufUtils;
 import cn.withemes.common.protocol.ChannelResponseWriteDecorator;
 import cn.withemes.user.api.dto.UserDTO;
@@ -15,6 +16,7 @@ import cn.withmes.su.server.business.entity.login.LoginRequest;
 import cn.withmes.su.server.business.entity.login.evnet.LoginSuccEventInfo;
 import cn.withmes.su.server.business.enums.PackageEnums;
 import cn.withmes.su.server.business.enums.response.login.LoginResponseEnums;
+import cn.withmes.su.server.business.handler.inbound.chat.ChatChannelHandle;
 import cn.withmes.su.server.business.pack.Package;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.channel.ChannelFuture;
@@ -69,12 +71,9 @@ public class LoginRequestHandle extends ChannelInboundHandlerAdapter {
             return;
         }
         applicationContext.publishEvent(LoginSuccEventInfo.builder().user(user).channel(ctx.channel()).build());
-        ChannelFuture future = ctx.writeAndFlush(BytBufUtils.objToByteBuf(ResponseWrapper.loginSuccResponse(LoginResponseEnums.LOGIN_SUCC)));
-        future.addListener((ChannelFuture futureListener) -> {
-            log.info("响应结果,id= {}",ctx.channel().id());
-            log.info("[NettyEchoServerHandler] 写回后，msg");
-        });
-        //ctx.pipeline().remove(this);
+        channelResponseWriteDecorator.writeAndFlush(ctx,ResponseWrapper.loginSuccResponse(LoginResponseEnums.LOGIN_SUCC));
+        ctx.pipeline().remove(this);
+        ctx.pipeline().addLast("chat", SpringUtil.getBean(ChatChannelHandle.class));
         super.channelRead(ctx, msg);
     }
 

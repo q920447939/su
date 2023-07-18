@@ -50,4 +50,12 @@ public class ResponseWrapper {
         responseData.setMessage(message);
         return responseData;
     }
+
+    public static ResponseData chatFailResponse(ResponseEnumsInterface responseEnumsInterface) {
+        ResponseData responseData = new ResponseData();
+        responseData.setType((short) PackageEnums.CHAT.getType());
+        responseData.setCode(responseEnumsInterface.code());
+        responseData.setMessage(responseEnumsInterface.desc());
+        return responseData;
+    }
 }

@@ -5,6 +5,7 @@
  */
 package cn.withemes.common.protocol;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChannelResponseWriteDecorator {
     public void writeAndFlush(ChannelHandlerContext ctx, Object msg) {
+        ctx.writeAndFlush(BytBufUtils.objToByteBuf(msg));
+    }
+
+    public void writeAndFlush(Channel ctx, Object msg) {
         ctx.writeAndFlush(BytBufUtils.objToByteBuf(msg));
     }
 }
