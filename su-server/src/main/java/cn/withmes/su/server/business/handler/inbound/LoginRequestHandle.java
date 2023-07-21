@@ -6,7 +6,6 @@
 package cn.withmes.su.server.business.handler.inbound;
 
 import cn.hutool.extra.spring.SpringUtil;
-import cn.withemes.common.protocol.BytBufUtils;
 import cn.withemes.common.protocol.ChannelResponseWriteDecorator;
 import cn.withemes.user.api.dto.UserDTO;
 import cn.withemes.user.api.dto.UserQueryRequestDTO;
@@ -18,9 +17,9 @@ import cn.withmes.su.server.business.enums.PackageEnums;
 import cn.withmes.su.server.business.enums.response.login.LoginResponseEnums;
 import cn.withmes.su.server.business.handler.inbound.chat.ChatChannelHandle;
 import cn.withmes.su.server.business.handler.inbound.userlist.UserChannelHandle;
+import cn.withmes.su.server.business.handler.state.ServerIdleStateHandler;
 import cn.withmes.su.server.business.pack.Package;
 import com.alibaba.fastjson.JSONObject;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -76,6 +75,7 @@ public class LoginRequestHandle extends ChannelInboundHandlerAdapter {
         ctx.pipeline().remove(this);
         ctx.pipeline().addLast("chat", SpringUtil.getBean(ChatChannelHandle.class));
         ctx.pipeline().addLast("userlist", SpringUtil.getBean(UserChannelHandle.class));
+        ctx.pipeline().addFirst("serverIdleState", SpringUtil.getBean(ServerIdleStateHandler.class));
         super.channelRead(ctx, msg);
     }
 

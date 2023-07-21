@@ -10,6 +10,7 @@ public enum PackageEnums {
     CHAT(2, "聊天"),
     USER_FRIEND(3, "用户列表"),
 
+    HEAR_BEAT(30000, "心跳"),
     ;
     private int type;
     private String desc;
